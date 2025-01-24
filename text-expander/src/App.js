@@ -4,7 +4,8 @@ import "./index.css";
 export default function App() {
   return (
     <div>
-      <TextExpander>
+      <TextExpander         collapsedNumWords={10}
+      >
         Space travel is the ultimate adventure! Imagine soaring past the stars
         and exploring new worlds. It's the stuff of dreams and science fiction,
         but believe it or not, space travel is a real thing. Humans and robots
@@ -13,7 +14,7 @@ export default function App() {
       </TextExpander>
 
       <TextExpander
-        collapsedNumWords={20}
+        collapsedNumWords={33}
         expandButtonText="Show text"
         collapseButtonText="Collapse text"
         buttonColor="#ff6622"
@@ -31,15 +32,20 @@ export default function App() {
         travel is a pretty cool thing to think about. Who knows what we'll
         discover next!
       </TextExpander>
+      <TextExpander collapseButtonText="Less" expandButtonText="More">
+        Space missions have given us incredible insights into our universe and
+        have inspired future generations to keep reaching for the stars. Space
+        travel is a pretty cool thing to think about. Who knows what we'll
+        discover next!
+      </TextExpander>
     </div>
   );
 }
 
-function TextExpander({children ,collapsedNumWords=30 , expandButtonText='Show more',  collapseButtonText='show less',  buttonColor='blue'}) {
-  const [expanded, setExpanded]= useState(false)
+function TextExpander({children ,collapsedNumWords=30 , expandButtonText='Show more',  collapseButtonText='show less',  buttonColor='blue', expanded=false , className='box'}) {
+  const [expand, setExpand]= useState(expanded)
   const buttonStyle = {
-    backgroundColor: buttonColor,
-    color: "#fff",
+    color:buttonColor,
     border: "none",
     padding: "5px 10px",
     cursor: "pointer",
@@ -50,15 +56,18 @@ function TextExpander({children ,collapsedNumWords=30 , expandButtonText='Show m
   const firstHalf= splitText.slice(0,collapsedNumWords).join(" ");
   const secondHalf=splitText.length > collapsedNumWords ? splitText.slice(collapsedNumWords,).join(" ") : ''
  function handleExpand(){
-  setExpanded(!expanded)
+  setExpand(!expand)
  }
   return (
-    <p>
+    <p className={className}>
      {firstHalf}
-
-          {expanded?<><button style={buttonStyle} onClick={handleExpand}>{collapseButtonText}</button> <br/>  {secondHalf}</> :<><button style={buttonStyle} onClick={handleExpand}>...{expandButtonText} {''}</button></>}
-                    
-
+{expand&&secondHalf }
+{!expand&&secondHalf&&'...'}
+          {/* {expand?<><button style={buttonStyle} onClick={handleExpand}>{collapseButtonText}</button> <br/>  {secondHalf}</> :<><button style={buttonStyle} onClick={handleExpand}>...{expandButtonText} {''}</button></>} */}
+       {secondHalf&&(
+       <button style={buttonStyle} onClick={handleExpand}>{expand? collapseButtonText : expandButtonText}</button>)
+       
+       }
     </p>
   )
 }
